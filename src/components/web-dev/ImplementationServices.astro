@@ -1,0 +1,40 @@
+---
+interface Props {
+  devServices: any[];
+}
+
+const { devServices } = Astro.props;
+---
+
+<section id="services" class="min-h-screen w-full flex items-center justify-center p-4 md:p-8 snap-start relative border-t border-surface/30 section-pt bg-surface/5">
+  <div class="max-w-5xl mx-auto w-full">
+    <div class="text-center mb-16 flex flex-col items-center">
+      <div class="text-[clamp(5rem,25vw,12rem)] font-heading font-bold text-primary-end/30 leading-none mb-[-2rem] md:mb-[-4rem] select-none" aria-hidden="true">
+        80/20
+      </div>
+      <h2 class="text-xs md:text-sm font-body font-medium uppercase tracking-[0.1em] text-accent mb-4 relative z-10">Implementation & Migration</h2>
+      <h3 class="text-3xl md:text-5xl font-heading font-bold text-text-heading mb-6 relative z-10">High-Performance Development</h3>
+      <p class="text-text-body text-lg max-w-2xl mx-auto relative z-10">
+        One Strategist replaces a bloated agency. By focusing on the critical leverage points, I deliver elite foundations without breaking your business. To unlock these implementations, completion of the Technical Foundation Blueprint is required.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {devServices.map((service) => (
+        <a href={`/web-development/${service.slug}`} class="border border-surface/50 bg-primary-base p-8 relative flex flex-col hover:border-accent/50 transition-colors group focus-visible:ring-4 focus-visible:ring-accent outline-none">
+          <div class="flex items-center gap-2 mb-4 text-accent/50 group-hover:text-accent transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <span class="text-xs uppercase tracking-widest font-bold">Protocol</span>
+          </div>
+          
+          <h4 class="text-xl font-heading font-bold text-text-heading mb-2 group-hover:text-accent transition-colors">{service.data.serviceTitle}</h4>
+          <p class="text-sm text-text-body/80 mb-6 flex-grow">{service.data.scope}</p>
+          
+          <div class="mt-auto">
+            <span class="text-accent text-sm font-bold flex items-center gap-2">Read Description <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:translate-x-1 transition-transform" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,79 @@
+---
+// TheLeak.astro - Homepage Version
+// Block 2: The Growth Ceiling
+---
+
+<section id="the-leak" class="min-h-screen w-full flex items-start md:items-center justify-center p-4 md:p-8 snap-start relative border-t border-surface/30 section-pt">
+  <div class="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
+    
+    <!-- Left Column: Copy (The Cost) -->
+    <div class="flex flex-col">
+      <h2 class="text-xs md:text-sm font-body font-medium uppercase tracking-[0.1em] text-accent mb-4">
+        Why Growth Has Stalled
+      </h2>
+      
+      <h3 class="text-3xl md:text-5xl font-heading font-bold tracking-tight leading-tight text-text-heading mb-6">
+        You've hit the growth ceiling. Your investors are noticing.
+      </h3>
+      
+      <p class="text-text-body text-lg leading-relaxed mb-6">
+        You know your product is solid and has untapped market. Yet things seem to be slowing down before they should. What's going on?
+      </p>
+      <p class="text-text-body text-lg leading-relaxed mb-8">
+        It's likely that you're burning runway on disconnected marketing efforts and a tech stack that wasn't built for a <strong class="text-text-heading">go-to-market assault.</strong>
+      </p>
+      
+      <div class="p-6 bg-surface/50 border-l-4 border-error mb-8">
+        <h4 class="text-sm font-body font-bold uppercase tracking-wide text-text-heading">
+          This isn't a sales problem. It's an engine problem.
+        </h4>
+      </div>
+    </div>
+    
+    <!-- Right Column: Visual (Infrastructure Capped Growth) -->
+    <div class="flex justify-center items-center w-full aspect-square relative opacity-90" role="img" aria-label="Conceptual diagram: Growth arrow hitting the horizontal underside of infrastructure stairs, representing a growth ceiling.">
+      <svg viewBox="0 0 200 200" class="w-full h-full text-text-heading" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Infrastructure Stairs (The Ceiling) -->
+        <path 
+          d="M40,180 V140 H80 V100 H120 V60 H160" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="4" 
+          stroke-linejoin="miter"
+        />
+        
+        <!-- Labels positioned over steps - Size 5, centered with clearance -->
+        <g class="opacity-90 font-body font-bold uppercase tracking-widest" fill="currentColor" font-size="5">
+          <text x="60" y="120" text-anchor="middle">
+            <tspan x="60" dy="0">Legacy</tspan>
+            <tspan x="60" dy="6">Website</tspan>
+          </text>
+          <text x="96" y="80" text-anchor="middle">
+            <tspan x="96" dy="0">Unoptimized</tspan>
+            <tspan x="96" dy="6">DB</tspan>
+          </text>
+          <text x="140" y="40" text-anchor="middle">
+            <tspan x="140" dy="0">Fragile</tspan>
+            <tspan x="140" dy="6">Cloud</tspan>
+          </text>
+        </g>
+
+        <!-- Growth Arrow Group -->
+        <g class="animate-pulse">
+          <path 
+            d="M45,180 L60,143.5 L80,160 L100,103.5 L120,120 L140,63.5 L152,75.5" 
+            fill="none" 
+            stroke="#22c55e" 
+            stroke-width="3" 
+            stroke-linecap="butt" 
+            stroke-linejoin="miter"
+          />
+          <g transform="translate(155, 78.5) rotate(45)">
+            <path d="M-8,-5 L0,0 L-8,5 Z" fill="#22c55e" />
+          </g>
+        </g>
+      </svg>
+    </div>
+    
+  </div>
+</section>

@@ -1,0 +1,54 @@
+---
+// Hero.astro
+// Block 1: Hero Axiom
+// Section Logic: Combined Authority Pattern
+// Grid Layout: 12-Column Grid | Content spans Cols 1-10
+// Container Physics: [Height: 100vh] | [Scroll: Snap-Point]
+
+// Copy:
+// [H1 | SEO Intent]: Anderson Timana - Digital Infrastructure Strategist & External CTO (VR3)
+// [H2 | The Hook]: Stop building your business on digital sand. (VR1)
+// [CTA 1]: Discover if you're (Action)
+// [CTA 2]: Access Free Tools (Action)
+---
+
+<section id="hero-axiom" class="min-h-screen w-full flex items-center justify-center p-4 md:p-8 snap-start relative overflow-hidden">
+  <!-- Subtle animated background effect - Using percentage sizes to prevent viewport overflow -->
+  <div class="absolute inset-0 pointer-events-none mix-blend-overlay opacity-20 overflow-hidden">
+    <div class="absolute w-[80%] aspect-square max-w-[400px] bg-accent rounded-full blur-[120px] -top-20 -left-20 animate-pulse"></div>
+  </div>
+
+  <div class="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-4 relative z-10">
+    <div class="col-span-1 md:col-span-10 flex flex-col justify-center">
+      
+      <!-- H1 is SEO focused but visually small (VR3 logic) -->
+      <h1 class="text-xs md:text-sm font-body font-medium uppercase tracking-[0.1em] text-accent mt-2 mb-4">
+        Anderson Timana - Digital Infrastructure Strategist & External CTO
+      </h1>
+      
+      <!-- The main hook (VR1 Dominant) -->
+      <h2 class="text-4xl sm:text-5xl md:text-7xl lg:text-[6rem] font-heading font-bold tracking-[-0.02em] leading-[1.1] text-text-heading mb-10 max-w-4xl">
+        Stop building your business on digital sand.
+      </h2>
+      
+      <!-- Call To Actions -->
+      <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-4">
+        <a href="#the-leak" id="begin-journey" class="btn bg-accent text-primary-base px-8 py-4 hover:bg-white inline-flex items-center justify-center">
+          Discover if you're
+        </a>
+        <a href="/free-tools" id="access-tools" class="btn bg-transparent border border-white text-text-heading px-8 py-4 hover:border-accent hover:text-accent inline-flex items-center justify-center">
+          Access Free Tools
+        </a>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Scroll hint arrow (mobile mostly) -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden sm:block pointer-events-none">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-text-body opacity-50">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <polyline points="19 12 12 19 5 12"></polyline>
+    </svg>
+  </div>
+</section>

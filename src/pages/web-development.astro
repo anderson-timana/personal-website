@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import WebDevNavigation from '../components/WebDevNavigation.astro';
+import Hero from '../components/web-dev/Hero.astro';
+import TheLeak from '../components/web-dev/TheLeak.astro';
+import DigitalStone from '../components/web-dev/DigitalStone.astro';
+import DiagnosticGateway from '../components/web-dev/DiagnosticGateway.astro';
+import ImplementationServices from '../components/web-dev/ImplementationServices.astro';
+import InsuranceShowcase from '../components/web-dev/InsuranceShowcase.astro';
+import PortfolioGrid from '../components/web-dev/PortfolioGrid.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+const auditBlueprint = await getEntry('services', 'website-audit-blueprint');
+const allServices = await getCollection('services');
+
+const devServices = allServices.filter(p => p.data.audience === 'web-dev' && p.data.category === 'web-dev');
+devServices.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+
+const insuranceService = await getEntry('services', 'website-insurance');
+
+// Fetch latest 3 web-dev case studies
+const allCaseStudies = await getCollection('case-studies', ({ data }) => {
+  return data.isDraft !== true && data.showcase?.includes('web-dev');
+});
+
+const latestCaseStudies = allCaseStudies
+  .sort((a, b) => (b.data.pubDate?.getTime() || 0) - (a.data.pubDate?.getTime() || 0))
+  .slice(0, 3);
+
+const portfolioItems = latestCaseStudies.map(study => ({
+  title: study.data.caseTitle,
+  url: `/case-studies/${study.slug}`,
+  image: study.data.thumbnail || 'https://placehold.co/600x400/2a2a2a/ffffff?text=Project',
+  tags: study.data.tags,
+  alt: study.data.metaDescription
+}));
+---
+
+<Layout title="Professional Web Development | Anderson Timana" description="Elite technical foundations and scalable digital assets for businesses that want to be future proof.">
+  <WebDevNavigation />
+  
+  <main id="main-content" class="w-full relative">
+    
+    <Hero />
+    <TheLeak />
+    <DigitalStone />
+    <DiagnosticGateway auditBlueprint={auditBlueprint} />
+    <ImplementationServices devServices={devServices} />
+    <InsuranceShowcase insuranceService={insuranceService} />
+    <PortfolioGrid portfolioItems={portfolioItems} />
+
+    <Footer type="freelancer" />
+  </main>
+</Layout>
+
+<style>
+  /* Enable snapping on the root level for native keyboard support */
+  :global(html) {
+    scroll-snap-type: y mandatory;
+  }
+</style>

@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Local Fonts (DSGVO Compliant) */
+@import "@fontsource/syne/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/700.css";
+
+@theme {
+  --color-primary-base: #1F1F1F;
+  --color-primary-end: #22262E;
+  --color-accent: #00FF7F;
+  --color-text-heading: #FFFFFF;
+  --color-text-body: #E0E0E0;
+  --color-surface: #2A2E3C;
+  --color-error: #FF4A4A;
+
+  --font-heading: "Syne", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Minor Third typography scale */
+  --text-base: 1rem;
+  --text-lg: 1.2rem;
+  --text-xl: 1.44rem;
+  --text-2xl: 1.728rem;
+  --text-3xl: 2.074rem;
+  --text-4xl: 2.488rem;
+}
+
+@layer base {
+
+  html,
+  body {
+    @apply font-body text-text-body bg-primary-base;
+    background: linear-gradient(120deg, var(--color-primary-base) 0%, var(--color-primary-end) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Smooth scroll behavior fallback */
+    scroll-behavior: smooth;
+  }
+
+  /* Mobile-only scroll padding to account for floating elements */
+  @media (max-width: 767px) {
+    html, body, #main-content {
+      scroll-padding-top: 100px;
+    }
+    .section-pt {
+      padding-top: 100px;
+    }
+  }
+
+  /* Desktop snap behavior must have zero offset to align correctly */
+  @media (min-width: 768px) {
+    html, body, #main-content {
+      scroll-padding-top: 0;
+    }
+    .section-pt {
+      padding-top: 0;
+    }
+  }
+
+  /* Default Typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading text-text-heading;
+  }
+
+  h1 {
+    @apply text-3xl md:text-4xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl font-bold;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl font-bold;
+  }
+
+  section {
+    /* The background is now handled by the body with a fixed attachment. */
+    background: transparent;
+  }
+
+  p,
+  a,
+  span,
+  div {
+    @apply text-base leading-relaxed;
+  }
+
+  /* Buttons and interactive elements */
+  button,
+  .btn {
+    @apply font-body font-bold text-sm uppercase rounded-none cursor-pointer transition-colors duration-200;
+  }
+
+  /* Focus rings for Accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-primary-base;
+  }
+}

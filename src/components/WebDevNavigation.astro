@@ -1,0 +1,118 @@
+---
+// WebDevNavigation.astro
+---
+
+<header class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] z-40 py-1 md:py-3 px-6 md:px-10 flex justify-between items-center text-text-heading bg-primary-base/80 backdrop-blur-md border border-surface/20 rounded-2xl shadow-2xl transition-all duration-300">
+  <div class="logo font-heading font-bold tracking-tight text-lg md:text-xl">
+    <a href="/web-development" aria-label="Web Development Home" class="hover:text-accent transition-colors focus-visible:ring-2 focus-visible:ring-accent outline-none">AT.</a>
+  </div>
+  
+  <!-- Desktop Expanded Nav -->
+  <nav class="hidden md:flex items-center gap-8 font-heading font-bold tracking-wide">
+    <a href="/web-development/#the-leak" class="hover:text-accent transition-colors text-sm md:text-base">The Problem</a>
+    <a href="/web-development/#digital-stone" class="hover:text-accent transition-colors text-sm md:text-base">The Solution</a>
+    <a href="/web-development/case-studies" class="hover:text-accent transition-colors text-sm md:text-base">Portfolio</a>
+    <a href="/blog" class="hover:text-accent transition-colors text-sm md:text-base">Blog</a>
+    <a href="/about-me" class="hover:text-accent transition-colors text-sm md:text-base">About Me</a>
+    <a href="/web-development/#the-gateway" class="btn bg-accent text-primary-base px-6 py-2 hover:bg-white transition-colors text-sm md:text-base">Get Started</a>
+  </nav>
+
+  <!-- Mobile Collapsed Nav -->
+  <nav class="md:hidden pointer-events-auto">
+    <button 
+      id="webdev-menu-toggle" 
+      class="select-none bg-primary-base/40 border border-surface/20 backdrop-blur-md appearance-none hover:text-accent transition-colors flex items-center justify-center p-2 focus-visible:ring-2 focus-visible:ring-accent outline-none rounded-xl"
+      aria-expanded="false" 
+      aria-controls="webdev-mobile-menu"
+      aria-label="Open Navigation Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </nav>
+</header>
+
+<!-- Fullscreen Overlay Menu -->
+<div id="webdev-mobile-menu" class="fixed inset-0 z-50 flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300 bg-primary-base" style="background: linear-gradient(120deg, #1F1F1F 0%, #3A3F50 100%);" aria-hidden="true">
+  <button id="webdev-menu-close" class="absolute top-4 right-4 flex items-center justify-center w-12 h-12 hover:text-accent transition-colors bg-transparent border-none cursor-pointer text-text-heading select-none focus-visible:ring-2 focus-visible:ring-accent outline-none" aria-label="Close Navigation Menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <nav class="w-full px-8">
+    <ul class="text-center space-y-8 flex flex-col items-center">
+      <li><a href="/web-development/#the-leak" class="webdev-menu-link font-heading text-3xl font-bold text-text-heading hover:text-accent transition-colors">The Problem</a></li>
+      <li><a href="/web-development/#digital-stone" class="webdev-menu-link font-heading text-3xl font-bold text-text-heading hover:text-accent transition-colors">The Solution</a></li>
+      <li><a href="/web-development/#portfolio" class="webdev-menu-link font-heading text-3xl font-bold text-text-heading hover:text-accent transition-colors">Portfolio</a></li>
+      <li class="pt-4 w-full max-w-xs">
+        <a href="/web-development/#the-gateway" class="webdev-menu-link btn bg-accent text-primary-base px-8 py-4 hover:bg-white transition-colors font-heading text-2xl font-bold block text-center rounded-xl shadow-xl">
+          Get Started
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('webdev-menu-toggle');
+  const closeBtn = document.getElementById('webdev-menu-close');
+  const menu = document.getElementById('webdev-mobile-menu');
+  const menuLinks = menu?.querySelectorAll('.webdev-menu-link');
+  
+  const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  
+  const toggleMenu = () => {
+    const isExpanded = toggleBtn?.getAttribute('aria-expanded') === 'true';
+    if (!isExpanded) {
+      menu?.classList.remove('opacity-0', 'pointer-events-none');
+      menu?.setAttribute('aria-hidden', 'false');
+      toggleBtn?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden'; 
+      (closeBtn as HTMLElement)?.focus();
+    } else {
+      menu?.classList.add('opacity-0', 'pointer-events-none');
+      menu?.setAttribute('aria-hidden', 'true');
+      toggleBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      (toggleBtn as HTMLElement)?.focus();
+    }
+  };
+
+  toggleBtn?.addEventListener('click', toggleMenu);
+  closeBtn?.addEventListener('click', toggleMenu);
+
+  menuLinks?.forEach(link => {
+    link.addEventListener('click', toggleMenu);
+  });
+
+  // Focus trap logic
+  menu?.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+
+    const focusableContent = menu.querySelectorAll(focusableElements);
+    const firstFocusableElement = focusableContent[0] as HTMLElement;
+    const lastFocusableElement = focusableContent[focusableContent.length - 1] as HTMLElement;
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstFocusableElement) {
+        lastFocusableElement.focus(); 
+        e.preventDefault();
+      }
+    } else {
+      if (document.activeElement === lastFocusableElement) {
+        firstFocusableElement.focus(); 
+        e.preventDefault();
+      }
+    }
+  });
+
+  // Close menu on Esc key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggleBtn?.getAttribute('aria-expanded') === 'true') {
+      toggleMenu();
+    }
+  });
+</script>

@@ -1,0 +1,37 @@
+---
+interface Props {
+  auditBlueprint: any;
+}
+
+const { auditBlueprint } = Astro.props;
+---
+
+<section id="the-gateway" class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 snap-start relative border-t border-surface/30 section-pt">
+  <div class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div class="text-center lg:text-left">
+      <h2 class="text-xs md:text-sm font-body font-medium uppercase tracking-[0.1em] text-accent mb-6">
+        How to get started
+      </h2>
+      <h3 class="text-4xl md:text-6xl font-heading font-bold tracking-tight leading-tight text-text-heading mb-8">
+        Let me diagnose your digital assets.
+      </h3>
+      <p class="text-text-body text-lg leading-relaxed mb-8">
+        Technical foundations are critical for your long-term success. I verify your infrastructure's viability through a mandatory fixed-price audit before considering any long-term implementation.
+      </p>
+    </div>
+    
+    {auditBlueprint && (
+      <div class="border border-accent bg-primary-base p-8 md:p-10 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 bg-accent text-primary-base text-xs uppercase tracking-widest font-bold px-4 py-1">
+          Mandatory Entry
+        </div>
+        <h4 class="text-2xl md:text-3xl font-heading font-bold text-text-heading mb-4">{auditBlueprint.data.serviceTitle}</h4>
+        <div class="text-xl font-heading font-bold text-accent mb-6">{auditBlueprint.data.priceLabel}</div>
+        <p class="text-text-body mb-8 line-clamp-4">{auditBlueprint.data.scope}</p>
+        <a href={`/web-development/${auditBlueprint.slug}`} class="btn bg-accent text-primary-base px-8 py-4 hover:bg-white inline-block w-full text-center font-bold uppercase tracking-widest">
+          Get Started
+        </a>
+      </div>
+    )}
+  </div>
+</section>

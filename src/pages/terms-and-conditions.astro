@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import { getEntry } from 'astro:content';
+
+const entry = await getEntry('legal', 'terms-and-conditions');
+if (!entry) {
+    return Astro.redirect('/404');
+}
+
+const { Content } = await entry.render();
+const { title, description, lastUpdated } = entry.data;
+---
+
+<Layout title={`${title} | Anderson Timana`} description={description}>
+  <Navigation />
+  
+  <main id="main-content" class="pt-24 min-h-screen flex flex-col">
+    <article class="p-4 md:p-8 max-w-3xl mx-auto w-full flex-grow">
+      
+      <header class="mb-16">
+        <h1 class="text-xs md:text-sm font-body font-medium uppercase tracking-[0.1em] text-accent mb-6">
+          Legal Foundation
+        </h1>
+        
+        <h2 class="text-4xl md:text-6xl font-heading font-bold tracking-tight leading-[1.1] text-text-heading mb-4">
+          {title}
+        </h2>
+        
+        <p class="text-text-body/60 text-sm italic">
+            Last Updated: {lastUpdated}
+        </p>
+      </header>
+
+      <div class="prose prose-invert prose-lg text-text-body mb-16 max-w-none 
+        prose-headings:text-text-heading prose-headings:font-heading prose-headings:font-bold
+        prose-h2:text-2xl prose-h2:border-t prose-h2:border-surface/30 prose-h2:pt-8 prose-h2:mt-12
+        prose-h3:text-xl prose-h3:text-accent prose-h3:mt-8
+        prose-strong:text-text-heading prose-a:text-accent hover:prose-a:text-white prose-a:transition-colors
+        prose-ul:list-disc prose-li:marker:text-accent">
+        <Content />
+      </div>
+
+    </article>
+
+    <Footer />
+  </main>
+</Layout>

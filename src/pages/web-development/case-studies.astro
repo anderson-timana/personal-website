@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import WebDevNavigation from '../../components/WebDevNavigation.astro';
+import Footer from '../../components/Footer.astro';
+import CaseStudyGrid from '../../components/CaseStudyGrid.astro';
+import { getCollection } from 'astro:content';
+
+// Fetch all non-draft case studies filtered for 'web-dev' showcase
+const caseStudies = await getCollection('case-studies', ({ data }) => {
+  return data.isDraft !== true && data.showcase?.includes('web-dev');
+});
+
+// Sort by date descending
+caseStudies.sort((a, b) => (b.data.pubDate?.getTime() || 0) - (a.data.pubDate?.getTime() || 0));
+---
+
+<Layout title="Web Development Case Studies | Anderson Timana" description="Explore technical case studies focusing on elite web development, performance optimization, and scalable digital assets.">
+  <WebDevNavigation />
+  
+  <main id="main-content" class="pt-24 min-h-screen flex flex-col">
+    <CaseStudyGrid 
+      studies={caseStudies}
+      seoTitle="Web Development: Performance, Scale, & Technical Excellence"
+      title="Real-world results for elite businesses."
+      description="From performance rescues to full-scale digital infrastructure deployments. These stories detail the technical strategies used to build high-performance assets."
+    />
+    <Footer type="freelancer" />
+  </main>
+</Layout>

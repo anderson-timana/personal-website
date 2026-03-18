@@ -1,0 +1,115 @@
+---
+// Navigation.astro
+---
+
+<header class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] z-40 py-1 md:py-3 px-6 md:px-10 flex justify-between items-center text-text-heading bg-primary-base/80 backdrop-blur-md border border-surface/20 rounded-2xl shadow-2xl transition-all duration-300">
+  <div class="logo font-heading font-bold tracking-tight text-lg md:text-xl">
+    <a href="/" aria-label="Home" class="hover:text-accent transition-colors focus-visible:ring-2 focus-visible:ring-accent outline-none">AT.</a>
+  </div>
+  
+  <!-- Desktop Expanded Nav -->
+  <nav class="hidden md:flex items-center gap-8 font-heading font-bold tracking-wide">
+    <a href="/" class="hover:text-accent transition-colors text-sm md:text-base">Home</a>
+    <a href="/services" class="hover:text-accent transition-colors text-sm md:text-base">Services</a>
+    <a href="/case-studies" class="hover:text-accent transition-colors text-sm md:text-base">Case Studies</a>
+    <a href="/free-tools" class="hover:text-accent transition-colors text-sm md:text-base">Free Tools</a>
+    <a href="/blog" class="hover:text-accent transition-colors text-sm md:text-base">Blog</a>
+    <a href="/about-me" class="hover:text-accent transition-colors text-sm md:text-base">About Me</a>
+  </nav>
+
+  <!-- Mobile Menu Toggle -->
+  <nav class="md:hidden pointer-events-auto">
+    <button 
+      id="menu-toggle" 
+      class="select-none bg-primary-base/40 border border-surface/20 backdrop-blur-md appearance-none hover:text-accent transition-colors flex items-center justify-center p-2 focus-visible:ring-2 focus-visible:ring-accent outline-none rounded-xl"
+      aria-expanded="false" 
+      aria-controls="mobile-menu"
+      aria-label="Open Navigation Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </nav>
+</header>
+
+<!-- Fullscreen Overlay Menu -->
+<div id="mobile-menu" class="fixed inset-0 z-50 flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300 bg-primary-base" style="background: linear-gradient(120deg, #1F1F1F 0%, #3A3F50 100%);" aria-hidden="true">
+  <button id="menu-close" class="absolute top-4 right-4 flex items-center justify-center w-12 h-12 hover:text-accent transition-colors bg-transparent border-none cursor-pointer text-text-heading select-none focus-visible:ring-2 focus-visible:ring-accent outline-none" aria-label="Close Navigation Menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <nav>
+    <ul class="text-center space-y-6 md:space-y-8">
+      <li><a href="/" class="menu-link font-heading text-3xl font-bold text-text-heading hover:text-accent focus-visible:text-accent transition-colors outline-none">Home</a></li>
+      <li><a href="/case-studies" class="menu-link font-heading text-3xl font-bold text-text-heading hover:text-accent focus-visible:text-accent transition-colors outline-none">Case Studies</a></li>
+      <li><a href="/services" class="menu-link font-heading text-3xl font-bold text-text-heading hover:text-accent focus-visible:text-accent transition-colors outline-none">Services</a></li>
+      <li><a href="/free-tools" class="menu-link font-heading text-3xl font-bold text-text-heading hover:text-accent focus-visible:text-accent transition-colors outline-none">Free Tools</a></li>
+      <li><a href="/about-me" class="menu-link font-heading text-3xl font-bold text-text-heading hover:text-accent focus-visible:text-accent transition-colors outline-none">About Me</a></li>
+    </ul>
+  </nav>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('menu-toggle');
+  const closeBtn = document.getElementById('menu-close');
+  const menu = document.getElementById('mobile-menu');
+  const menuLinks = menu?.querySelectorAll('.menu-link');
+  
+  const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  
+  const toggleMenu = () => {
+    const isExpanded = toggleBtn?.getAttribute('aria-expanded') === 'true';
+    if (!isExpanded) {
+      menu?.classList.remove('opacity-0', 'pointer-events-none');
+      menu?.setAttribute('aria-hidden', 'false');
+      toggleBtn?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden'; 
+      (closeBtn as HTMLElement)?.focus();
+    } else {
+      menu?.classList.add('opacity-0', 'pointer-events-none');
+      menu?.setAttribute('aria-hidden', 'true');
+      toggleBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      (toggleBtn as HTMLElement)?.focus();
+    }
+  };
+
+  toggleBtn?.addEventListener('click', toggleMenu);
+  closeBtn?.addEventListener('click', toggleMenu);
+
+  menuLinks?.forEach(link => {
+    link.addEventListener('click', toggleMenu);
+  });
+
+  // Focus trap logic
+  menu?.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+
+    const focusableContent = menu.querySelectorAll(focusableElements);
+    const firstFocusableElement = focusableContent[0] as HTMLElement;
+    const lastFocusableElement = focusableContent[focusableContent.length - 1] as HTMLElement;
+
+    if (e.shiftKey) { // if shift key pressed for shift + tab combination
+      if (document.activeElement === firstFocusableElement) {
+        lastFocusableElement.focus(); 
+        e.preventDefault();
+      }
+    } else { // if tab key is pressed
+      if (document.activeElement === lastFocusableElement) {
+        firstFocusableElement.focus(); 
+        e.preventDefault();
+      }
+    }
+  });
+
+  // Close menu on Esc key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggleBtn?.getAttribute('aria-expanded') === 'true') {
+      toggleMenu();
+    }
+  });
+</script>

@@ -1,0 +1,168 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+
+const tools = [
+  {
+    title: "The Anti-Website Advisor",
+    description: "You probably don't need a new website. Use this logic to identify if your current problem is architectural or just a lack of clarity.",
+    cta: "Use Tool"
+  },
+  {
+    title: "Infrastructure Health Check",
+    description: "Uncover hidden performance leaks and SEO barriers. A surgical audit of your site's technical health, security, and rendering speed.",
+    cta: "Run Audit"
+  },
+  {
+    title: "The Open-Source Stack Architect",
+    description: "Escape SaaS captivity. Discover portable, open-source alternatives to proprietary platforms that keep your digital assets under your absolute control.",
+    cta: "Build Stack"
+  }
+];
+---
+
+<Layout title="Free Digital Infrastructure Strategy Tools | Anderson Timana" description="Access my free toolkit: Anti-Website Advisor, Infrastructure Health Check, and Stack Architect.">
+  <Navigation />
+  
+  <main id="main-content" class="pt-24 min-h-screen flex flex-col items-center">
+    
+    <section class="w-full max-w-4xl mx-auto p-4 md:p-8 flex-grow">
+      <div class="text-center mb-16">
+        <h1 class="text-xs md:text-sm font-body font-medium uppercase tracking-[0.1em] text-accent mb-6">
+          Digital Infrastructure Strategy Tools
+        </h1>
+        
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold tracking-tight leading-tight text-text-heading mb-6">
+          Access My Toolkit
+        </h2>
+        
+        <p class="text-text-body text-lg leading-relaxed max-w-2xl mx-auto">
+          These tools are Google Gems built on my strategic logic. Enter your executive email to unlock access to the entire repository.
+        </p>
+      </div>
+
+      <!-- Email Capture Form -->
+      <div id="form-container" class="bg-surface/20 border border-surface/50 p-6 md:p-10 mb-20">
+        <form class="flex flex-col gap-6" id="mailing-list-form">
+          {/* Honeypot for bots */}
+          <input type="text" name="email_address_check" value="" class="hidden" tabindex="-1" autocomplete="off" />
+
+          <div class="flex flex-col md:flex-row gap-4">
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Enter email address" 
+              aria-label="Enter email address"
+              required 
+              class="flex-grow bg-primary-base border border-surface/50 focus:border-accent text-text-heading p-4 outline-none transition-colors"
+            />
+            <button type="submit" id="form-submit" class="btn bg-accent text-primary-base px-10 py-4 hover:bg-white min-w-48">
+              Unlock Tools
+            </button>
+          </div>
+          
+          <label class="flex items-start gap-3 cursor-pointer group">
+            <input type="checkbox" name="consent" required class="mt-1 w-5 h-5 accent-accent bg-primary-base border-surface/50 rounded-none shrink-0" />
+            <span class="text-sm text-text-body group-hover:text-text-heading transition-colors">
+              I accept to join the mailing list. I understand I will only be contacted with highly-curated new tools and product launches. No spam.
+            </span>
+          </label>
+
+          {/* Cloudflare Turnstile */}
+          <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="dark"></div>
+          
+          <p id="form-error" class="text-error text-sm font-bold uppercase hidden"></p>
+        </form>
+      </div>
+      
+      <!-- The Tools -->
+      <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-50 select-none pointer-events-none transition-all duration-700" aria-hidden="true" title="Unlock to access">
+        {tools.map(tool => (
+          <div class="border border-surface/30 bg-primary-base/50 p-6 flex flex-col h-full">
+            <h3 class="text-xl font-heading font-bold text-text-heading mb-4">{tool.title}</h3>
+            <p class="text-text-body mb-8 flex-grow">{tool.description}</p>
+            <div class="mt-auto">
+              <span class="inline-block border border-surface text-surface py-2 px-6 uppercase text-sm font-bold tracking-widest">
+                {tool.cta}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+    </section>
+
+    <Footer />
+  </main>
+</Layout>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script>
+  import { actions } from 'astro:actions';
+  import { z } from 'zod';
+
+  const emailSchema = z.object({
+    email: z
+      .string()
+      .email("Please provide a valid email.")
+      .min(1, "Email is required"),
+  });
+
+  const form = document.getElementById('mailing-list-form') as HTMLFormElement;
+  const container = document.getElementById('form-container');
+  const toolsGrid = document.getElementById('tools-grid');
+  const submitBtn = document.getElementById('form-submit');
+  const errorMsg = document.getElementById('form-error');
+
+  if (form && container && toolsGrid && submitBtn && errorMsg) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Reset UI
+      errorMsg.classList.add('hidden');
+      submitBtn.setAttribute('disabled', 'true');
+      submitBtn.classList.add('opacity-50');
+
+      const formData = new FormData(form);
+      const { data, error } = await actions.subscribe(formData);
+
+      if (error) {
+        errorMsg.textContent = error.message || "Authorization failed. Please verify your credentials.";
+        errorMsg.classList.remove('hidden');
+        submitBtn.removeAttribute('disabled');
+        submitBtn.classList.remove('opacity-50');
+
+        // Reset Turnstile on error
+        if (window.turnstile) {
+          window.turnstile.reset();
+        }
+      } else {
+        // Success State
+        container.innerHTML = `
+          <div class="text-center py-4">
+            <p class="text-accent text-xl font-heading font-bold uppercase tracking-widest animate-pulse">
+              ${data.message}
+            </p>
+            <p class="text-text-body/70 mt-2">Repository access granted. Strategy tools unlocked below.</p>
+          </div>
+        `;
+        
+        // Unlock Tools
+        toolsGrid.classList.remove('opacity-50', 'select-none', 'pointer-events-none');
+        toolsGrid.removeAttribute('aria-hidden');
+        toolsGrid.removeAttribute('title');
+        
+        // Update button text in the grid items if needed (currently they are spans)
+        const ctaSpans = toolsGrid.querySelectorAll('span');
+        ctaSpans.forEach(span => {
+          span.classList.remove('text-surface', 'border-surface');
+          span.classList.add('text-accent', 'border-accent', 'hover:bg-accent', 'hover:text-primary-base', 'transition-colors', 'cursor-pointer');
+        });
+      }
+    });
+  }
+</script>

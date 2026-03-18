@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="The Human behind the Strategy | Anderson Timana" description="External CTO & Digital Infrastructure Strategist. I build high-performance website foundations for businesses.">
+  <Navigation />
+  
+  <main id="main-content" class="pt-24 min-h-screen flex flex-col">
+    <article class="p-4 md:p-8 max-w-3xl mx-auto w-full flex-grow">
+      
+      <header class="mb-16 text-center">
+        <h1 class="text-xs md:text-sm font-body font-bold uppercase tracking-[0.1em] text-accent mb-6">
+          The Human behind the Strategy
+        </h1>
+        
+        <h2 class="text-4xl md:text-6xl font-heading font-bold tracking-tight leading-[1.1] text-text-heading mb-8">
+          Anderson Timana
+        </h2>
+        
+        <p class="text-xl text-text-body font-body italic">
+          External CTO & Digital Infrastructure Strategist
+        </p>
+      </header>
+
+      <div class="prose prose-invert prose-lg text-text-body mb-16">
+        <p>
+          I operate at the intersection of <strong>Business Strategy</strong>, <strong>Technical Architecture</strong>, and <strong>Growth Marketing</strong>. For over a decade, I have helped sophisticated founders and CEOs rescue their digital assets from "sandy foundations" and vendor captivity.
+        </p>
+
+        <h3 class="text-text-heading">The Philosophy: Autonomy & Ownership</h3>
+        <p>
+          Most businesses are built on fragile, proprietary ground. They are held hostage by bloated agencies, complex page builders, and recursive monthly liabilities. I believe your digital presence should be a <strong>portable, scalable asset</strong> that you own 100%.
+        </p>
+
+        <h3 class="text-text-heading">The Methodology: Surgical Efficiency</h3>
+        <p>
+          I apply the <strong>80/20 principle</strong> to infrastructure. By identifying the critical leverage points in your code and architecture, I achieve in weeks what agencies bill for in months. I don't "tweak"—I perform forensic audits and implement high-performance website foundations designed for the next decade of the web.
+        </p>
+
+        <blockquote class="border-l-4 border-accent pl-6 py-2 italic text-text-heading bg-surface/20">
+          "Technical debt is not an IT issue; it is a financial failure draining your capital."
+        </blockquote>
+
+        <h3 class="text-text-heading">Why I work solo</h3>
+        <p>
+          Bloated teams create communication overhead and diluted accountability. When you work with me, you are working directly with the architect. My competence in multiple areas allows me to fix without breaking anything else in your business ecosystem.
+        </p>
+      </div>
+
+      <div class="mt-16 flex flex-col items-center border-t border-surface/50 pt-16 pb-12">
+        <p class="text-text-body mb-8 text-center max-w-lg">
+          Ready to stop building on sand and start building a solid foundation?
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-6">
+          <a href="/services" class="btn bg-accent text-primary-base px-10 py-5 hover:bg-white text-lg">
+            View Services
+          </a>
+          <a href="/" class="btn bg-transparent border border-white text-text-heading px-10 py-5 hover:border-accent hover:text-accent">
+            Back Home
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <Footer />
+  </main>
+</Layout>

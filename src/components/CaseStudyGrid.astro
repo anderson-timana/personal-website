@@ -1,0 +1,170 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  studies: CollectionEntry<'case-studies'>[];
+  title?: string;
+  description?: string;
+  seoTitle?: string;
+}
+
+const { studies, title, description, seoTitle } = Astro.props;
+
+// Derive dynamic filters from the provided studies
+const workflows = [...new Set(studies.map(s => s.data.workflow))].filter(w => w !== 'other');
+const sectors = [...new Set(studies.map(s => s.data.sector))].filter(s => s !== 'other');
+
+const formatLabel = (str: string) => str.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+---
+
+<section class="p-4 md:p-8 max-w-7xl mx-auto w-full flex-grow">
+  {seoTitle && (
+    <h1 class="text-xs md:text-sm font-body font-medium uppercase tracking-[0.1em] text-accent mb-6 text-center md:text-left">
+      {seoTitle}
+    </h1>
+  )}
+  
+  {title && (
+    <h2 class="text-3xl md:text-5xl font-heading font-bold tracking-tight leading-tight text-text-heading mb-12 max-w-3xl text-center md:text-left mx-auto md:mx-0">
+      {title}
+    </h2>
+  )}
+
+  {description && (
+    <p class="text-text-body text-lg mb-12 max-w-2xl text-center md:text-left mx-auto md:mx-0">
+      {description}
+    </p>
+  )}
+  
+  <!-- Filters -->
+  <div class="flex flex-col gap-6 mb-12 border border-surface/50 bg-primary-base p-6 md:p-8">
+    {workflows.length > 0 && (
+      <div>
+        <h3 class="text-xs font-body font-bold uppercase tracking-widest text-text-body mb-4">Filter by Workflow</h3>
+        <div class="flex flex-wrap gap-3" id="category-filters">
+          <button class="cat-btn btn border-2 border-accent bg-accent/10 text-accent px-5 py-1.5 text-xs hover:bg-accent hover:text-primary-base transition-colors" data-cat="all">All Workflows</button>
+          {workflows.map(w => (
+            <button class="cat-btn btn border-2 border-surface bg-transparent text-text-body px-5 py-1.5 text-xs hover:border-accent hover:text-accent transition-colors" data-cat={w}>{formatLabel(w)}</button>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {sectors.length > 0 && (
+      <div>
+        <h3 class="text-xs font-body font-bold uppercase tracking-widest text-text-body mb-4">Filter by Sector</h3>
+        <div class="flex flex-wrap gap-3" id="sector-filters">
+          <button class="sec-btn btn border-2 border-accent bg-accent/10 text-accent px-5 py-1.5 text-xs hover:bg-accent hover:text-primary-base transition-colors" data-sec="all">All Sectors</button>
+          {sectors.map(s => (
+            <button class="sec-btn btn border-2 border-surface bg-transparent text-text-body px-5 py-1.5 text-xs hover:border-accent hover:text-accent transition-colors" data-sec={s}>{formatLabel(s)}</button>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+  
+  <!-- Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12" id="case-study-list">
+    {studies.length === 0 ? (
+      <div class="col-span-full py-24 text-center border border-dashed border-surface/50">
+        <p class="text-text-body/50 italic">No case studies found matching this criteria.</p>
+      </div>
+    ) : (
+      studies.map((caseStudy) => (
+        <a href={`/case-studies/${caseStudy.slug}`} class="case-item block group border border-surface/50 bg-surface/10 hover:border-accent/50 transition-colors flex flex-col min-h-[300px] overflow-hidden" data-category={caseStudy.data.workflow} data-sector={caseStudy.data.sector}>
+          
+          {caseStudy.data.thumbnail && (
+            <div class="aspect-video w-full overflow-hidden border-b border-surface/30">
+              <img src={caseStudy.data.thumbnail} alt={caseStudy.data.caseTitle} loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+          )}
+
+          <div class="p-6 md:p-8 flex-grow flex flex-col">
+            <div class="flex gap-2 mb-4">
+              <span class="text-[10px] font-body font-bold uppercase tracking-widest text-accent bg-accent/10 px-2 py-1">
+                {caseStudy.data.workflow.replace('-', ' ')}
+              </span>
+              <span class="text-[10px] font-body font-bold uppercase tracking-widest text-text-heading bg-surface/50 px-2 py-1">
+                {caseStudy.data.sector}
+              </span>
+            </div>
+
+            <h3 class="text-2xl font-heading font-bold text-text-heading mb-4 group-hover:text-accent transition-colors">
+              {caseStudy.data.caseTitle}
+            </h3>
+            
+            <div class="text-text-body mt-auto pt-6 border-t border-surface/30">
+              <p class="text-sm italic">{caseStudy.data.verdict}</p>
+            </div>
+          </div>
+        </a>
+      ))
+    )}
+  </div>
+</section>
+
+<script>
+  // Client-side filtering logic for two dimensions (Category and Sector)
+  const initFilters = () => {
+    const catButtons = document.querySelectorAll('.cat-btn');
+    const secButtons = document.querySelectorAll('.sec-btn');
+    const caseItems = document.querySelectorAll('.case-item');
+
+    let currentCategory = 'all';
+    let currentSector = 'all';
+
+    if (!caseItems.length) return;
+
+    const applyFilters = () => {
+      caseItems.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        const itemSector = item.getAttribute('data-sector');
+        
+        const matchesCategory = currentCategory === 'all' || currentCategory === itemCategory;
+        const matchesSector = currentSector === 'all' || currentSector === itemSector;
+
+        if (matchesCategory && matchesSector) {
+          (item as HTMLElement).style.display = 'flex'; // Use flex because of the class flex-col
+          
+          // Subtle fade-in animation
+          (item as HTMLElement).style.opacity = '0';
+          setTimeout(() => {
+            (item as HTMLElement).style.opacity = '1';
+            (item as HTMLElement).style.transition = 'opacity 0.3s ease-in-out';
+          }, 10);
+        } else {
+          (item as HTMLElement).style.display = 'none';
+        }
+      });
+    };
+
+    const updateActiveButton = (buttons: NodeListOf<Element>, activeBtn: Element) => {
+      buttons.forEach(btn => {
+        btn.classList.remove('border-accent', 'bg-accent/10', 'text-accent');
+        btn.classList.add('border-surface', 'bg-transparent', 'text-text-body');
+      });
+      activeBtn.classList.remove('border-surface', 'bg-transparent', 'text-text-body');
+      activeBtn.classList.add('border-accent', 'bg-accent/10', 'text-accent');
+    };
+
+    catButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentCategory = button.getAttribute('data-cat') || 'all';
+        updateActiveButton(catButtons, button);
+        applyFilters();
+      });
+    });
+
+    secButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        currentSector = button.getAttribute('data-sec') || 'all';
+        updateActiveButton(secButtons, button);
+        applyFilters();
+      });
+    });
+  };
+
+  // Initialize on page load and after swaps
+  document.addEventListener('DOMContentLoaded', initFilters);
+  document.addEventListener('astro:after-swap', initFilters);
+</script>

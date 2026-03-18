@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import CaseStudyGrid from '../../components/CaseStudyGrid.astro';
+import { getCollection } from 'astro:content';
+
+// Fetch all non-draft case studies filtered for 'main' showcase
+const caseStudies = await getCollection('case-studies', ({ data }) => {
+  return data.isDraft !== true && data.showcase?.includes('main');
+});
+
+// Sort by date descending
+caseStudies.sort((a, b) => (b.data.pubDate?.getTime() || 0) - (a.data.pubDate?.getTime() || 0));
+---
+
+<Layout title="Technical Case Studies & Rescue Audits | Anderson Timana" description="Explore high-stake case studies of rescued digital architectures, scalable infrastructures, and growth stories.">
+  <Navigation />
+  
+  <main id="main-content" class="pt-24 min-h-screen flex flex-col">
+    <CaseStudyGrid 
+      studies={caseStudies}
+      seoTitle="Case Studies: Rescue Audits, Technical Debt, & Sustainable Scaling"
+      title="Gain Insights for Future High-stakes Situations."
+    />
+    <Footer />
+  </main>
+</Layout>

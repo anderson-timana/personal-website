@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { wpFetch } from '../../utils/wpGraphql';
+
+export async function getStaticPaths() {
+  // Query all slugs to generate paths during build time
+  const slugsQuery = `
+    query GetPostSlugs {
+      posts(first: 1000) {
+        nodes {
+          slug
+        }
+      }
+    }
+  `;
+  
+  const data = await wpFetch({ query: slugsQuery });
+  const posts = data?.posts?.nodes || [];
+
+  return posts.map((post: { slug: string }) => ({
+    params: { slug: post.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+// Query the specific post by slug using default WordPress fields
+const singlePostQuery = `
+  query GetSinglePost($id: ID!) {
+    post(id: $id, idType: SLUG) {
+      title
+      date
+      content
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+    }
+  }
+`;
+
+const data = await wpFetch({ query: singlePostQuery, variables: { id: slug } });
+const post = data?.post;
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+// Fallbacks for SEO using default fields
+const seoTitle = post.title;
+const seoDesc = `Read ${post.title} on Anderson Timana's Engineering Blog.`;
+---
+
+<Layout title={`${seoTitle} | Anderson Timana`} description={seoDesc}>
+  <Navigation />
+  
+  <main id="main-content" class="pt-24 min-h-screen flex flex-col">
+    <article class="p-4 md:p-8 max-w-3xl mx-auto w-full flex-grow">
+      
+      <div class="mb-12 border-b border-surface/50 pb-12 text-center">
+        <time class="inline-block bg-surface text-text-body text-xs uppercase tracking-widest font-bold px-4 py-1 mb-6">
+          {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+        
+        <h1 class="text-4xl md:text-6xl font-heading font-bold tracking-tight leading-[1.1] text-text-heading mb-8">
+          {post.title}
+        </h1>
+        
+        {post.featuredImage && (
+          <div class="mt-8 border border-surface/30">
+            <img 
+              src={post.featuredImage.node.sourceUrl} 
+              alt={post.featuredImage.node.altText || post.title}
+              class="w-full h-auto aspect-[21/9] object-cover"
+            />
+          </div>
+        )}
+      </div>
+
+      <div class="prose prose-invert prose-lg text-text-body mb-16" set:html={post.content} />
+
+      <div class="mt-16 border-t border-surface/50 pt-8 flex justify-center">
+        <a href="/blog" class="text-accent hover:text-white uppercase tracking-widest font-bold text-sm inline-flex items-center gap-2 transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Back to Index
+        </a>
+      </div>
+    </article>
+
+    <Footer />
+  </main>
+</Layout>

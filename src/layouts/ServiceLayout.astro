@@ -1,0 +1,252 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import Layout from './Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import WebDevNavigation from '../components/WebDevNavigation.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+interface Props {
+  entry: CollectionEntry<'services'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+// Construct Service Schema (JSON-LD)
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": entry.data.serviceTitle,
+  "description": entry.data.scope,
+  "provider": {
+    "@type": "Person",
+    "name": "Anderson Timana",
+    "jobTitle": "Digital Infrastructure Strategist"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": entry.data.priceLabel.replace(/[^0-9.]/g, '') || "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+};
+
+const isWebDevAudience = entry.data.audience === 'web-dev';
+const isAuditBlueprint = entry.slug === 'website-audit-blueprint';
+const isAuditImplementation = entry.slug === 'website-audit-implementation';
+const isWebDevService = (isWebDevAudience && !isAuditBlueprint) || isAuditImplementation;
+
+const ctaLabel = isWebDevService ? "GET STARTED" : "Submit for Vetting";
+const ctaHref = entry.data.ctaUrl || (isWebDevService ? (isAuditImplementation ? "/services/website-growth-audit" : "/web-development/website-audit-blueprint") : "#");
+
+// Breadcrumb logic
+const breadcrumbRoot = isWebDevAudience 
+  ? { label: 'Main Page', href: '/web-development' } 
+  : { label: 'Home', href: '/' };
+
+const breadcrumbItems = [
+  ...(isWebDevAudience ? [] : [{ label: 'Services', href: '/services' }]),
+  { label: entry.data.serviceTitle }
+];
+
+const backLinkHref = isWebDevAudience ? "/web-development" : "/services";
+const backLinkLabel = isWebDevAudience ? "Main Page" : "Workflow Menu";
+---
+
+<Layout title={`${entry.data.seoTitle} | Anderson Timana`} description={entry.data.metaDescription} structuredData={serviceSchema}>
+  {isWebDevAudience ? <WebDevNavigation /> : <Navigation />}
+  
+  <main id="main-content" class="pt-24 min-h-screen flex flex-col">
+    <article class="p-4 md:p-8 max-w-3xl mx-auto w-full flex-grow">
+      
+      <Breadcrumbs 
+        root={breadcrumbRoot}
+        items={breadcrumbItems} 
+      />
+
+      <div class="mb-12 border-b border-surface/50 pb-12">
+        {(entry.slug === 'website-audit-blueprint' || entry.slug === 'website-growth-audit') && (
+          <div class="inline-block bg-error text-text-heading text-xs uppercase tracking-widest font-bold px-4 py-1 mb-6">
+            Mandatory Entry Route
+          </div>
+        )}
+        
+        <h1 class="text-xs md:text-sm font-body font-bold uppercase tracking-[0.1em] text-accent mb-6">
+          {entry.data.seoTitle}
+        </h1>
+        
+        <h2 class="text-4xl md:text-6xl font-heading font-bold tracking-tight leading-[1.1] text-text-heading mb-6">
+          {entry.data.serviceTitle}
+        </h2>
+
+        <div class="text-2xl font-heading font-bold text-accent mb-8">
+          Investment: {entry.data.priceLabel}
+        </div>
+        
+        <p class="text-xl text-text-body font-body leading-relaxed max-w-2xl border-l-4 border-surface pl-6">
+          {entry.data.scope}
+        </p>
+      </div>
+
+      {isAuditBlueprint && (
+        <div class="path-selector">
+          <button data-path="legacy" class="active">I have a website</button>
+          <button data-path="new-build">I don't have a website</button>
+        </div>
+      )}
+
+      <div class="prose prose-invert prose-lg text-text-body mb-16">
+        <Content />
+      </div>
+
+      <div id="sticky-cta" class="fixed bottom-0 left-0 w-full p-4 md:p-6 bg-gradient-to-t from-primary-base via-primary-base/90 to-transparent transform transition-transform duration-300 z-50 flex justify-center opacity-0 pointer-events-none">
+        <a href={ctaHref} class="btn bg-accent text-primary-base px-10 py-5 hover:bg-white text-lg min-w-48 shadow-2xl">
+          {ctaLabel}
+        </a>
+      </div>
+
+      <div class="mt-8 flex flex-col items-center border-t border-surface/50 pt-16">
+        <p class="text-text-body mb-6 text-center max-w-lg">
+          {isWebDevService 
+            ? "To begin this implementation, we must first establish your strategic technical foundation."
+            : "Ready to establish your digital bedrock and sovereign infrastructure?"}
+        </p>
+        
+        <div id="static-cta-target" class="mb-16">
+          <a href={ctaHref} class="btn bg-accent text-primary-base px-10 py-5 hover:bg-white text-lg min-w-48">
+            {ctaLabel}
+          </a>
+        </div>
+        
+        <a href={backLinkHref} class="text-accent hover:text-white uppercase tracking-widest font-bold text-sm inline-flex items-center gap-2 transition-colors pb-12">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Back to {backLinkLabel}
+        </a>
+      </div>
+    </article>
+
+    <Footer type={isWebDevAudience ? 'freelancer' : 'cmo'} />
+  </main>
+</Layout>
+
+<style>
+  .path-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1.5rem;
+  }
+  .path-selector button {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: var(--color-text-body);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+  }
+  .path-selector button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-heading);
+  }
+  .path-selector button.active {
+    color: var(--color-text-heading);
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+</style>
+
+<script>
+  // --- Logic for Content Path Selector ---
+  const isAuditBlueprintPage = document.querySelector('.path-selector');
+
+  if (isAuditBlueprintPage) {
+    const selectorContainer = document.querySelector('.path-selector')!;
+    const buttons = selectorContainer.querySelectorAll('button');
+    const contentWrapper = document.querySelector('.prose')!;
+    
+    const updateContent = (path: string) => {
+      const sections = contentWrapper.querySelectorAll('.path-content') as NodeListOf<HTMLElement>;
+      sections.forEach(section => {
+        if (section.classList.contains(path)) {
+          section.style.display = 'block';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+
+      buttons.forEach(button => {
+        button.classList.toggle('active', button.dataset.path === path);
+      });
+    };
+
+    // Set initial state on page load
+    updateContent('legacy');
+
+    // Add event listeners
+    selectorContainer.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.matches('button')) {
+        const path = target.dataset.path;
+        if (path) {
+          updateContent(path);
+        }
+      }
+    });
+  }
+
+
+  // --- Logic for Sticky CTA ---
+  const stickyCta = document.getElementById('sticky-cta');
+  const staticCta = document.getElementById('static-cta-target');
+  const menuToggle = document.getElementById('menu-toggle');
+  let timeout: ReturnType<typeof setTimeout>;
+  let isStaticVisible = false;
+
+  const isMenuOpen = () => menuToggle?.getAttribute('aria-expanded') === 'true';
+
+  const showSticky = () => {
+    if (!stickyCta || isStaticVisible || isMenuOpen()) return;
+    stickyCta.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
+  };
+
+  const hideSticky = () => {
+    if (!stickyCta) return;
+    stickyCta.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
+  };
+
+  const handleInteraction = (event: Event) => {
+    if (event.target instanceof Element) {
+      if (event.target.closest('#sticky-cta') || event.target.closest('#static-cta-target')) {
+        return;
+      }
+    }
+
+    hideSticky();
+    clearTimeout(timeout);
+    timeout = setTimeout(showSticky, 2000);
+  };
+
+  if (staticCta) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isStaticVisible = entry.isIntersecting;
+        if (isStaticVisible) {
+          hideSticky();
+        } else {
+          showSticky();
+        }
+      });
+    }, { threshold: 0.1 });
+    observer.observe(staticCta);
+  }
+
+  window.addEventListener('scroll', handleInteraction, { passive: true });
+  window.addEventListener('mousedown', handleInteraction);
+  window.addEventListener('touchstart', handleInteraction, { passive: true });
+</script>

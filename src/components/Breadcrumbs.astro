@@ -1,0 +1,37 @@
+---
+interface Props {
+  items: {
+    label: string;
+    href?: string;
+  }[];
+  root?: {
+    label: string;
+    href: string;
+  } | null;
+}
+
+const { items, root = { label: 'Home', href: '/' } } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="mb-16">
+  <ol class="flex flex-wrap items-center gap-2 text-[0.7rem] md:text-xs font-body font-normal text-text-body">
+    {root && (
+      <li class="flex items-center gap-2">
+        <a href={root.href} class="hover:text-accent focus-visible:ring-2 focus-visible:ring-accent transition-colors underline-offset-4 hover:underline">{root.label}</a>
+        <span class="text-text-body/40" aria-hidden="true">/</span>
+      </li>
+    )}
+    {items.map((item, index) => (
+      <li class="flex items-center gap-2">
+        {item.href && index < items.length - 1 ? (
+          <>
+            <a href={item.href} class="hover:text-accent focus-visible:ring-2 focus-visible:ring-accent transition-colors underline-offset-4 hover:underline">{item.label}</a>
+            <span class="text-text-body/40" aria-hidden="true">/</span>
+          </>
+        ) : (
+          <span class="text-text-heading font-medium" aria-current="page">{item.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

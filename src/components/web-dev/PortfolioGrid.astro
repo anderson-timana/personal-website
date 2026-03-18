@@ -1,0 +1,54 @@
+---
+interface PortfolioItem {
+  title: string;
+  url: string;
+  image: string;
+  tags: string[];
+  alt?: string;
+}
+
+interface Props {
+  portfolioItems: PortfolioItem[];
+}
+
+const { portfolioItems } = Astro.props;
+---
+
+<section id="portfolio" class="w-full flex flex-col items-center p-4 md:p-8 snap-start scroll-mt-24 md:scroll-mt-32 relative border-t border-surface/30 section-pt pb-24">
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="text-center mb-16">
+      <h2 class="text-xs md:text-sm font-body font-medium uppercase tracking-[0.1em] text-accent mb-4">Case Studies & Live Assets</h2>
+      <h3 class="text-4xl md:text-5xl font-heading font-bold text-text-heading">Proven Technical Independence</h3>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+      {portfolioItems.map((item) => (
+        <a href={item.url} class="group block relative overflow-hidden border border-surface/30 bg-surface/5 focus-visible:ring-4 focus-visible:ring-accent outline-none">
+          <div class="aspect-video w-full overflow-hidden bg-surface/20">
+            <img src={item.image} alt={item.alt || `Screenshot of ${item.title} project`} loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-6">
+            <h4 class="text-xl font-heading font-bold text-text-heading group-hover:text-accent transition-colors mb-4 flex justify-between items-center">
+              {item.title}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0 transform duration-300" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </h4>
+            <div class="flex flex-wrap gap-2">
+              {item.tags.map(tag => (
+                <span class="text-[0.65rem] uppercase tracking-wider font-bold bg-surface/30 text-text-body px-2 py-1 rounded-sm">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="flex justify-center">
+      <a href="/web-development/case-studies" class="group inline-flex items-center gap-3 px-8 py-4 bg-accent text-primary-base font-bold uppercase tracking-widest text-sm hover:bg-white transition-all duration-300">
+        See all Web Development Case Studies
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:translate-x-1 transition-transform">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

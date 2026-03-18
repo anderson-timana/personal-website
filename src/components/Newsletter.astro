@@ -1,0 +1,98 @@
+---
+// Newsletter Component - Connected to Brevo via Astro Actions
+const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
+<div class="flex flex-col space-y-6">
+  <h3 class="text-xs font-body font-bold uppercase tracking-[0.2em] text-accent">Protocol Updates</h3>
+  <p class="text-text-body/70 text-sm">
+    Executive insights on technical risk and asset ownership. No spam, just blueprints.
+  </p>
+  
+  <div id="newsletter-container">
+    <form class="flex flex-col space-y-4" id="newsletter-form">
+      {/* Honeypot for bots */}
+      <input type="text" name="email_address_check" value="" class="hidden" tabindex="-1" autocomplete="off" />
+
+      <div class="relative group">
+        <input 
+          type="email" 
+          name="email"
+          placeholder="Executive Email" 
+          aria-label="Executive Email"
+          required 
+          class="w-full bg-surface/20 border border-surface/50 p-3 text-sm text-text-heading focus:border-accent outline-none transition-all group-hover:border-surface"
+        />
+        <button type="submit" id="newsletter-submit" aria-label="Subscribe" class="absolute right-2 top-1/2 -translate-y-1/2 text-accent hover:text-white transition-colors p-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="flex items-start gap-3">
+        <input 
+          type="checkbox" 
+          id="newsletter-consent" 
+          name="consent"
+          required 
+          class="mt-1 w-4 h-4 rounded-none bg-surface/20 border-surface/50 text-accent focus:ring-accent accent-accent cursor-pointer"
+        />
+        <label for="newsletter-consent" class="text-[10px] text-text-body/60 leading-tight cursor-pointer">
+          I agree to receive strategic communications and technical blueprints. I have read the <a href="/privacy-policy" class="underline hover:text-accent transition-colors">Privacy Policy</a> and understand I can opt-out at any time.
+        </label>
+      </div>
+
+      {/* Cloudflare Turnstile */}
+      <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="dark" data-size="compact"></div>
+      
+      <p id="newsletter-error" class="text-error text-[10px] uppercase font-bold hidden"></p>
+    </form>
+  </div>
+</div>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script>
+  import { actions } from 'astro:actions';
+
+  const form = document.getElementById('newsletter-form') as HTMLFormElement;
+  const container = document.getElementById('newsletter-container');
+  const submitBtn = document.getElementById('newsletter-submit');
+  const errorMsg = document.getElementById('newsletter-error');
+
+  if (form && container && submitBtn && errorMsg) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Reset UI
+      errorMsg.classList.add('hidden');
+      submitBtn.setAttribute('disabled', 'true');
+      submitBtn.classList.add('opacity-50');
+
+      const formData = new FormData(form);
+      const { data, error } = await actions.subscribe(formData);
+
+      if (error) {
+        errorMsg.textContent = error.message || "Transmission failed. Verify environment variables.";
+        errorMsg.classList.remove('hidden');
+        submitBtn.removeAttribute('disabled');
+        submitBtn.classList.remove('opacity-50');
+        
+        // Reset Turnstile on error
+        if (window.turnstile) {
+          window.turnstile.reset();
+        }
+      } else {
+        // Success State
+        container.innerHTML = `
+          <div class="p-4 border border-accent/30 bg-accent/5 animate-pulse">
+            <p class="text-accent text-xs font-bold uppercase tracking-widest">
+              ${data.message}
+            </p>
+          </div>
+        `;
+      }
+    });
+  }
+</script>
