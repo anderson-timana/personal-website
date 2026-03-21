@@ -1,6 +1,8 @@
 ---
+import type { CollectionEntry } from 'astro:content';
+
 interface Props {
-  auditBlueprint: any;
+  auditBlueprint: CollectionEntry<'services'> | undefined;
 }
 
 const { auditBlueprint } = Astro.props;

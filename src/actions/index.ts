@@ -5,19 +5,21 @@ const BREVO_API_KEY = import.meta.env.BREVO_API_KEY;
 const BREVO_LIST_ID = import.meta.env.PUBLIC_BREVO_LIST_ID;
 const TURNSTILE_SECRET_KEY = import.meta.env.TURNSTILE_SECRET_KEY;
 
+export const subscribeSchema = z.object({
+  email: z.string().email("Please provide a valid executive email."),
+  consent: z.any().transform(val => !!val).refine(val => val === true, {
+    message: "Consent is required to proceed."
+  }),
+  // Turnstile Token
+  'cf-turnstile-response': z.string().min(1, "Security verification required."),
+  // Honeypot
+  email_address_check: z.string().max(0, "Bot detected.")
+});
+
 export const server = {
   subscribe: defineAction({
     accept: 'form',
-    input: z.object({
-      email: z.string().email("Please provide a valid executive email."),
-      consent: z.any().transform(val => !!val).refine(val => val === true, {
-        message: "Consent is required to proceed."
-      }),
-      // Turnstile Token
-      'cf-turnstile-response': z.string().min(1, "Security verification required."),
-      // Honeypot
-      email_address_check: z.string().max(0, "Bot detected.")
-    }),
+    input: subscribeSchema,
     handler: async (input) => {
       // 1. Verify Turnstile Token
       const verifyResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {

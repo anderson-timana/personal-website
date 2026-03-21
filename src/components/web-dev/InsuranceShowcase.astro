@@ -1,6 +1,8 @@
 ---
+import type { CollectionEntry } from 'astro:content';
+
 interface Props {
-  insuranceService: any;
+  insuranceService: CollectionEntry<'services'> | undefined;
 }
 
 const { insuranceService } = Astro.props;

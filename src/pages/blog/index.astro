@@ -69,6 +69,8 @@ const posts: Post[] = data?.posts?.nodes || [];
                   <img 
                     src={post.featuredImage.node.sourceUrl} 
                     alt={post.featuredImage.node.altText || post.title} 
+                    loading="lazy"
+                    decoding="async"
                     class="w-full h-full object-cover aspect-video group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>

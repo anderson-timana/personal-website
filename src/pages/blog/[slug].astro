@@ -75,6 +75,8 @@ const seoDesc = `Read ${post.title} on Anderson Timana's Engineering Blog.`;
             <img 
               src={post.featuredImage.node.sourceUrl} 
               alt={post.featuredImage.node.altText || post.title}
+              loading="eager"
+              decoding="async"
               class="w-full h-auto aspect-[21/9] object-cover"
             />
           </div>

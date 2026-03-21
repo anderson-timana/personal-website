@@ -1,6 +1,8 @@
 ---
+import type { CollectionEntry } from 'astro:content';
+
 interface Props {
-  devServices: any[];
+  devServices: CollectionEntry<'services'>[];
 }
 
 const { devServices } = Astro.props;

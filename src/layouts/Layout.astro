@@ -7,6 +7,7 @@ interface Props {
     structuredData?: object;
     canonical?: string;
     ogImage?: string;
+    noindex?: boolean;
 }
 
 const { 
@@ -14,7 +15,8 @@ const {
     description = "Anderson Timana - Digital Infrastructure Strategist & External CTO", 
     structuredData, 
     canonical,
-    ogImage = "/og-image.png" 
+    ogImage = "/og-image.png",
+    noindex = false
 } = Astro.props;
 
 const siteUrl = "https://andersontimana.me";
@@ -28,6 +30,8 @@ const currentUrl = canonical || `${siteUrl}${Astro.url.pathname}`;
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="description" content={description} />
 		<title>{title}</title>
+
+        {noindex && <meta name="robots" content="noindex, nofollow" />}
 
         <!-- Favicons -->
         <link rel="icon" type="image/png" href="/favicon.png" />

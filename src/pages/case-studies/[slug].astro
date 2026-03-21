@@ -20,6 +20,34 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 
+const siteUrl = "https://andersontimana.me";
+const pageUrl = `${siteUrl}/case-studies/${entry.slug}`;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": entry.data.seoTitle,
+  "description": entry.data.metaDescription,
+  "author": {
+    "@type": "Person",
+    "name": "Anderson Timana",
+    "url": siteUrl
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Anderson Timana Consulting",
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${siteUrl}/favicon.png`
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": pageUrl
+  },
+  "image": `${siteUrl}/og-image.png`
+};
+
 // Breadcrumb logic for main audience
 const breadcrumbRoot = { label: 'Home', href: '/' };
 const breadcrumbItems = [
@@ -28,7 +56,7 @@ const breadcrumbItems = [
 ];
 ---
 
-<Layout title={`${entry.data.seoTitle} | Anderson Timana`} description={entry.data.metaDescription}>
+<Layout title={`${entry.data.seoTitle} | Anderson Timana`} description={entry.data.metaDescription} structuredData={structuredData}>
   <Navigation />
   
   <main id="main-content" class="pt-24 min-h-screen flex flex-col">

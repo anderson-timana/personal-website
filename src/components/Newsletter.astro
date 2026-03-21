@@ -51,7 +51,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
   </div>
 </div>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <script>
   import { actions } from 'astro:actions';
@@ -67,10 +67,24 @@ const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       
       // Reset UI
       errorMsg.classList.add('hidden');
+      
+      const formData = new FormData(form);
+      const formValues = Object.fromEntries(formData);
+
+      // Dynamic Import for Validation (Reduces initial bundle weight)
+      const { subscribeSchema } = await import('astro:actions');
+
+      // Client-side Validation (The Pro Way)
+      const result = subscribeSchema.safeParse(formValues);
+      if (!result.success) {
+        errorMsg.textContent = result.error.errors[0].message;
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+
       submitBtn.setAttribute('disabled', 'true');
       submitBtn.classList.add('opacity-50');
 
-      const formData = new FormData(form);
       const { data, error } = await actions.subscribe(formData);
 
       if (error) {

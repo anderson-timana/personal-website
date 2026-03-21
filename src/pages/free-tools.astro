@@ -99,18 +99,10 @@ const tools = [
   </main>
 </Layout>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <script>
   import { actions } from 'astro:actions';
-  import { z } from 'zod';
-
-  const emailSchema = z.object({
-    email: z
-      .string()
-      .email("Please provide a valid email.")
-      .min(1, "Email is required"),
-  });
 
   const form = document.getElementById('mailing-list-form') as HTMLFormElement;
   const container = document.getElementById('form-container');
@@ -124,10 +116,24 @@ const tools = [
       
       // Reset UI
       errorMsg.classList.add('hidden');
+      
+      const formData = new FormData(form);
+      const formValues = Object.fromEntries(formData);
+
+      // Dynamic Import for Validation (Reduces initial bundle weight)
+      const { subscribeSchema } = await import('astro:actions');
+
+      // Client-side Validation
+      const result = subscribeSchema.safeParse(formValues);
+      if (!result.success) {
+        errorMsg.textContent = result.error.errors[0].message;
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+
       submitBtn.setAttribute('disabled', 'true');
       submitBtn.classList.add('opacity-50');
 
-      const formData = new FormData(form);
       const { data, error } = await actions.subscribe(formData);
 
       if (error) {
