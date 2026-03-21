@@ -30,7 +30,7 @@ const latestCaseStudies = allCaseStudies
 
 const portfolioItems = latestCaseStudies.map(study => ({
   title: study.data.caseTitle,
-  url: `/case-studies/${study.slug}`,
+  url: `/web-development/case-studies/${study.slug}`,
   image: study.data.thumbnail || 'https://placehold.co/600x400/2a2a2a/ffffff?text=Project',
   tags: study.data.tags,
   alt: study.data.metaDescription

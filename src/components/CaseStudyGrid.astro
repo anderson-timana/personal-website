@@ -6,9 +6,16 @@ interface Props {
   title?: string;
   description?: string;
   seoTitle?: string;
+  urlPrefix?: string;
 }
 
-const { studies, title, description, seoTitle } = Astro.props;
+const { 
+  studies, 
+  title, 
+  description, 
+  seoTitle,
+  urlPrefix = '/case-studies' 
+} = Astro.props;
 
 // Derive dynamic filters from the provided studies
 const workflows = [...new Set(studies.map(s => s.data.workflow))].filter(w => w !== 'other');
@@ -71,7 +78,7 @@ const formatLabel = (str: string) => str.replace('-', ' ').replace(/\b\w/g, l =>
       </div>
     ) : (
       studies.map((caseStudy) => (
-        <a href={`/case-studies/${caseStudy.slug}`} class="case-item block group border border-surface/50 bg-surface/10 hover:border-accent/50 transition-colors flex flex-col min-h-[300px] overflow-hidden" data-category={caseStudy.data.workflow} data-sector={caseStudy.data.sector}>
+        <a href={`${urlPrefix}/${caseStudy.slug}`} class="case-item block group border border-surface/50 bg-surface/10 hover:border-accent/50 transition-colors flex flex-col min-h-[300px] overflow-hidden" data-category={caseStudy.data.workflow} data-sector={caseStudy.data.sector}>
           
           {caseStudy.data.thumbnail && (
             <div class="aspect-video w-full overflow-hidden border-b border-surface/30">
