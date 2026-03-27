@@ -1,7 +1,7 @@
 /*
-  X-Frame-Options: DENY
+  X-Frame-Options: ALLOW-FROM https://tally.so/
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Permitted-Cross-Domain-Policies: none
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://tally.so; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://andersontimana.me https://tally.so; connect-src 'self' https://challenges.cloudflare.com https://api.brevo.com https://tally.so; frame-src https://challenges.cloudflare.com https://tally.so; base-uri 'self'; form-action 'self';
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://tally.so; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://andersontimana.me https://tally.so; connect-src 'self' https://challenges.cloudflare.com https://api.brevo.com https://tally.so; frame-src 'self' https://challenges.cloudflare.com https://tally.so;  frame-ancestors 'self' https://tally.so; object-src 'self'; base-uri 'self'; form-action 'self';
   Permissions-Policy: accelerometer=(), camera=(), gc=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()

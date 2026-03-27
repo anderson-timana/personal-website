@@ -28,8 +28,8 @@ jobs:
         env:
           # These are needed during SSG (Build Time)
           WP_GRAPHQL_URL: ${{ secrets.WP_GRAPHQL_URL }}
-          PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.PUBLIC_TURNSTILE_SITE_KEY }}
-          PUBLIC_BREVO_LIST_ID: ${{ secrets.PUBLIC_BREVO_LIST_ID }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+          PUBLIC_BREVO_LIST_ID: ${{ vars.PUBLIC_BREVO_LIST_ID }}
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
