@@ -55,8 +55,10 @@ const portfolioItems = latestCaseStudies.map(study => ({
 </Layout>
 
 <style>
-  /* Enable snapping on the root level for native keyboard support */
-  :global(html) {
-    scroll-snap-type: y mandatory;
+  /* Enable snapping on the root level for native keyboard support - Desktop only */
+  @media (min-width: 768px) {
+    :global(html) {
+      scroll-snap-type: y mandatory;
+    }
   }
 </style>
