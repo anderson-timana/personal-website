@@ -102,8 +102,6 @@ const tools = [
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <script>
-  import { actions } from 'astro:actions';
-
   const form = document.getElementById('mailing-list-form') as HTMLFormElement;
   const container = document.getElementById('form-container');
   const toolsGrid = document.getElementById('tools-grid');
@@ -121,7 +119,10 @@ const tools = [
       const formValues = Object.fromEntries(formData);
 
       // Dynamic Import for Validation (Reduces initial bundle weight)
-      const { subscribeSchema } = await import('astro:actions');
+      const [{ actions }, { subscribeSchema }] = await Promise.all([
+        import('astro:actions'),
+        import('../actions')
+      ]);
 
       // Client-side Validation
       const result = subscribeSchema.safeParse(formValues);
