@@ -9,7 +9,9 @@ import playformCompress from '@playform/compress';
 export default defineConfig({
   site: 'https://andersontimana.me',
   output: 'static',
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    imageService: 'compile'
+  }),
   integrations: [sitemap(), playformCompress()],
   vite: {
     plugins: [tailwindcss()]

@@ -36,4 +36,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=portfolio-website
+          command: pages deploy dist --project-name=portfolio-website --compatibility-flags=nodejs_compat --compatibility-date=2026-01-14

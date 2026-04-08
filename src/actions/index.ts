@@ -1,5 +1,5 @@
 import { defineAction } from 'astro:actions';
-import { z } from 'astro:content';
+import { z } from 'zod';
 
 const BREVO_API_KEY = import.meta.env.BREVO_API_KEY;
 const BREVO_LIST_ID = import.meta.env.PUBLIC_BREVO_LIST_ID;
