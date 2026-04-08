@@ -36,4 +36,10 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=portfolio-website --compatibility-flags=nodejs_compat --compatibility-date=2026-01-14
+          # We create a temporary wrangler.toml to provide compatibility settings 
+          # without committing the file to the repository.
+          command: |
+            echo 'compatibility_flags = ["nodejs_compat"]' > wrangler.toml
+            echo 'compatibility_date = "2026-01-14"' >> wrangler.toml
+            pages deploy dist --project-name=portfolio-website
+            rm wrangler.toml
