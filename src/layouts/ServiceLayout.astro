@@ -38,11 +38,11 @@ const isAuditImplementation = entry.slug === 'website-audit-implementation';
 const isWebDevService = (isWebDevAudience && !isAuditBlueprint) || isAuditImplementation;
 
 const ctaLabel = isWebDevService ? "GET STARTED" : "Submit for Vetting";
-const ctaHref = entry.data.ctaUrl || (isWebDevService ? (isAuditImplementation ? "/services/website-growth-audit" : "/web-development/website-audit-blueprint") : "#");
+const ctaHref = entry.data.ctaUrl || (isWebDevService ? (isAuditImplementation ? "/services/website-growth-audit/" : "/web-development/website-audit-blueprint/") : "#");
 
 // Breadcrumb logic
 const breadcrumbRoot = isWebDevAudience 
-  ? { label: 'Main Page', href: '/web-development' } 
+  ? { label: 'Main Page', href: '/web-development/' } 
   : { label: 'Home', href: '/' };
 
 const breadcrumbItems = [

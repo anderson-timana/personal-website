@@ -47,7 +47,7 @@ This is your asset. You should own it completely. I build websites that give you
 #### **Pillar 5: Engineered for Compliance & Accessibility**
 Your digital foundation must be legally robust. I ensure your presence meets strict EU and German regulations without compromising performance.
 *   **WCAG AAA Accessibility:** Every core element is engineered to meet the highest accessibility standards (WCAG 2.2 AAA), ensuring your business is inclusive and protected against accessibility-related liability.
-*   **Privacy-First & GDPR Compliant:** I implement privacy-by-design, utilizing cookie-less analytics (like Plausible or Matomo) and secure infrastructure to comply with GDPR and German Telemediengesetz (TMG).
+*   **Privacy-First & GDPR Compliant:** I implement privacy-by-design, utilizing cookie-less analytics (like Plausible or Matomo) and secure infrastructure to comply with GDPR and the German Digitale-Dienste-Gesetz (DDG / TDDDG).
 *   **Legal Transparency Infrastructure:** Built-in structures for mandatory disclosures, including automated Impressum and Privacy Policy management, tailored for the German market (Rechtssicherheit).
 
 ### Battle-Tested Technology Stacks

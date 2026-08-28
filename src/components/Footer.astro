@@ -25,12 +25,12 @@ const cmoSocials = [
 const socials = [...commonSocials, ...(type === 'freelancer' ? freelancerSocials : cmoSocials)];
 
 const internalLinks = [
-  { label: 'Services', href: '/services' },
-  { label: 'Case Studies', href: '/case-studies' },
-  { label: 'Free Tools', href: '/free-tools' },
-  { label: 'Web Development', href: '/web-development' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'About Me', href: '/about-me' },
+  { label: 'Services', href: '/services/' },
+  { label: 'Case Studies', href: '/case-studies/' },
+  { label: 'Free Tools', href: '/free-tools/' },
+  { label: 'Web Development', href: '/web-development/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'About Me', href: '/about-me/' },
 ];
 
 const currentYear = new Date().getFullYear();
@@ -62,7 +62,7 @@ const currentYear = new Date().getFullYear();
           </li>
         ))}
         <!--<li>
-          <a href="/links" class="text-text-body hover:text-accent transition-colors text-sm underline underline-offset-4 decoration-surface hover:decoration-accent decoration-2">
+          <a href="/links/" class="text-text-body hover:text-accent transition-colors text-sm underline underline-offset-4 decoration-surface hover:decoration-accent decoration-2">
             Links
           </a>
         </li>-->
@@ -96,17 +96,17 @@ const currentYear = new Date().getFullYear();
       </p>
       <ul class="flex flex-col space-y-3">
         <li>
-          <a href="/terms-and-conditions" class="text-text-body hover:text-accent transition-colors text-sm underline underline-offset-4 decoration-surface hover:decoration-accent decoration-2">
+          <a href="/terms-and-conditions/" class="text-text-body hover:text-accent transition-colors text-sm underline underline-offset-4 decoration-surface hover:decoration-accent decoration-2">
             Terms & Conditions (AGB)
           </a>
         </li>
         <li>
-          <a href="/privacy-policy" class="text-text-body hover:text-accent transition-colors text-sm underline underline-offset-4 decoration-surface hover:decoration-accent decoration-2">
+          <a href="/privacy-policy/" class="text-text-body hover:text-accent transition-colors text-sm underline underline-offset-4 decoration-surface hover:decoration-accent decoration-2">
             Privacy Policy (Datenschutzerklärung)
           </a>
         </li>
         <li>
-          <a href="/impressum" class="text-text-body hover:text-accent transition-colors text-sm underline underline-offset-4 decoration-surface hover:decoration-accent decoration-2">
+          <a href="/impressum/" class="text-text-body hover:text-accent transition-colors text-sm underline underline-offset-4 decoration-surface hover:decoration-accent decoration-2">
             Legal Notice (Impressum)
           </a>
         </li>

@@ -8,6 +8,7 @@ import playformCompress from '@playform/compress';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://andersontimana.me',
+  trailingSlash: 'always',
   output: 'static',
   adapter: cloudflare({
     imageService: 'compile'

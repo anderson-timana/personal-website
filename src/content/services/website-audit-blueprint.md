@@ -36,7 +36,7 @@ To deliver a truly actionable strategy, my process adapts to your specific conte
     *   For a **Legacy Audit**, you receive a crystal-clear "Health Score," quantifying the technical friction and indexability issues currently costing you revenue.
     </div>
     <div class="path-content new-build">
-    *   For an **Architectural Blueprint**, you receive a "Viability Score" and risk assessment, outlining the optimal technical stack (e.g., "Astro + Cloudflare") and compliance-ready plan (GDPR, TMG, WCAG 2.2).
+    *   For an **Architectural Blueprint**, you receive a "Viability Score" and risk assessment, outlining the optimal technical stack (e.g., "Astro + Cloudflare") and compliance-ready plan (GDPR, DDG, TDDDG, WCAG 2.2).
     </div>
 *   **Outcome:** You gain absolute clarity on your current technical reality or your future technical path, removing ambiguity and enabling confident decision-making.
 
